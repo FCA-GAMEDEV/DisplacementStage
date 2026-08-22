@@ -167,8 +167,7 @@ DisplacementStage/
 ├── bin/data/              # Shaders (GLSL), texturas e mapas de altura
 ├── docs/                  # Dissertação de Mestrado, artigos e documentação técnica
 │   ├── dissertacao_FCA.pdf
-│   ├── sbgames_FCA.pdf
-│   └── arquitetura_mapas_dinamicos_deslocamento_gpu.md
+│   └── sbgames_FCA.pdf
 ├── src/                   # Código-fonte em C++ e kernels OpenCL (.cl)
 │   ├── DisplacementStage.cpp
 │   ├── displacementStage.cl
