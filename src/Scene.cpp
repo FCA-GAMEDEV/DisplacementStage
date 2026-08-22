@@ -166,9 +166,9 @@ void Scene::mouseDragged(int x, int y, int button)
 		lastMouseX = x;
 		lastMouseY = y;
 
-		// Rotacionar câmera orbital
-		// Sensibilidade: 0.005 radianos por pixel
-		this->terrain->orbitCamera(-dx * 0.005f, -dy * 0.005f);
+		// Rotacionar visão da câmera (olhar ao redor)
+		// Sensibilidade: 0.003 radianos por pixel
+		this->terrain->orbitCamera(dx * 0.003f, -dy * 0.003f);
 	}
 }
 

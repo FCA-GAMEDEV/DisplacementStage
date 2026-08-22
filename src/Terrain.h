@@ -41,9 +41,8 @@ private:
     float x, y, z;      // posição da câmera
     float tx, ty, tz;   // alvo da câmera
 
-    float radius;       // distância da câmera ao alvo
-    float theta;        // ângulo azimutal (rotação horizontal)
-    float phi;          // ângulo polar (elevação vertical)
+    float yaw;          // rotação horizontal (olhar esquerda/direita)
+    float pitch;        // rotação vertical (olhar cima/baixo)
 
     bool  bWireframe;
     bool  bRotate;

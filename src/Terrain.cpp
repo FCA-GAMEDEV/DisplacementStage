@@ -7,9 +7,8 @@ Terrain::Terrain(void)
     , tessLevelOuter(64)
     , x(0.f), y(40.f), z(60.f)
     , tx(0.f), ty(0.f), tz(0.f)
-    , radius(72.1110255f)
-    , theta(1.57079632f) // pi/2
-    , phi(0.98279372f)
+    , yaw(-90.f)
+    , pitch(-33.69f)
     , bWireframe(false)
     , bRotate(false)
     , angle(0.f)
@@ -131,14 +130,14 @@ void Terrain::setCameraPosition(float cx, float cy, float cz)
     y = cy;
     z = cz;
 
-    // Recalcular coordenadas esféricas
-    float dx = x - tx;
-    float dy = y - ty;
-    float dz = z - tz;
-    radius = sqrt(dx*dx + dy*dy + dz*dz);
+    // Recalcular yaw e pitch baseados na direção ao alvo
+    float dx = tx - x;
+    float dy = ty - y;
+    float dz = tz - z;
+    float radius = sqrt(dx*dx + dy*dy + dz*dz);
     if (radius < 0.001f) radius = 0.001f;
-    phi = acos(glm::clamp(dy / radius, -1.f, 1.f));
-    theta = atan2(dz, dx);
+    pitch = glm::degrees(asin(dy / radius));
+    yaw = glm::degrees(atan2(dz, dx));
 }
 
 void Terrain::setCameraTarget(float cx, float cy, float cz)
@@ -147,14 +146,14 @@ void Terrain::setCameraTarget(float cx, float cy, float cz)
     ty = cy;
     tz = cz;
 
-    // Recalcular coordenadas esféricas
-    float dx = x - tx;
-    float dy = y - ty;
-    float dz = z - tz;
-    radius = sqrt(dx*dx + dy*dy + dz*dz);
+    // Recalcular yaw e pitch baseados na direção ao alvo
+    float dx = tx - x;
+    float dy = ty - y;
+    float dz = tz - z;
+    float radius = sqrt(dx*dx + dy*dy + dz*dz);
     if (radius < 0.001f) radius = 0.001f;
-    phi = acos(glm::clamp(dy / radius, -1.f, 1.f));
-    theta = atan2(dz, dx);
+    pitch = glm::degrees(asin(dy / radius));
+    yaw = glm::degrees(atan2(dz, dx));
 }
 
 void Terrain::setTessellationFactor(int inner, int outer)
@@ -177,26 +176,16 @@ void Terrain::decreaseTessellationFactor(int di, int dout)
 
 void Terrain::increaseCameraPosition(float dx, float dy, float dz)
 {
-    // dx: movimento lateral (right/left)
-    // dy: movimento vertical (up/down)
-    // dz: movimento frontal (forward/backward)
+    // dx: lateral (right/left)
+    // dy: vertical (up/down)
+    // dz: frontal (forward/backward na direção real do olhar 3D)
 
-    glm::vec3 camPos(x, y, z);
-    glm::vec3 camTarget(tx, ty, tz);
+    glm::vec3 f;
+    f.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    f.y = sin(glm::radians(pitch));
+    f.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    glm::vec3 forward = glm::normalize(f);
 
-    // Vetor forward projetado no plano horizontal XZ
-    glm::vec3 forward = camTarget - camPos;
-    forward.y = 0.f;
-    if (glm::length(forward) > 0.001f)
-    {
-        forward = glm::normalize(forward);
-    }
-    else
-    {
-        forward = glm::vec3(0.f, 0.f, -1.f);
-    }
-
-    // Vetor right perpendicular ao forward e ao up global (0, 1, 0)
     glm::vec3 right = glm::cross(forward, glm::vec3(0.f, 1.f, 0.f));
     if (glm::length(right) > 0.001f)
     {
@@ -207,19 +196,18 @@ void Terrain::increaseCameraPosition(float dx, float dy, float dz)
         right = glm::vec3(1.f, 0.f, 0.f);
     }
 
-    // Vetor up global
     glm::vec3 up(0.f, 1.f, 0.f);
 
-    // Calcular deslocamento final
+    // Deslocamento relativo em 3D
     glm::vec3 displacement = right * dx + up * dy + forward * dz;
 
-    // Aplicar a translação ao alvo (target) e à posição da câmera
-    tx += displacement.x;
-    ty += displacement.y;
-    tz += displacement.z;
+    // Na câmera livre, transladamos a posição física da câmera (x,y,z)
     x += displacement.x;
     y += displacement.y;
     z += displacement.z;
+
+    // Recalcular alvo para manter a direção de olhar
+    updateCartesianFromSpherical();
 }
 
 void Terrain::decreaseCameraPosition(float dx, float dy, float dz)
@@ -227,32 +215,35 @@ void Terrain::decreaseCameraPosition(float dx, float dy, float dz)
     increaseCameraPosition(-dx, -dy, -dz);
 }
 
-void Terrain::orbitCamera(float dTheta, float dPhi)
+void Terrain::orbitCamera(float dYaw, float dPitch)
 {
-    theta += dTheta;
-    phi += dPhi;
+    // Rotacionar a direção da visão (Yaw e Pitch) com base no delta do mouse
+    yaw += dYaw * 57.2957795f; 
+    pitch += dPitch * 57.2957795f;
 
-    // Travar phi um pouco antes dos polos (0.01 a pi - 0.01) para evitar inversão
-    const float limit = 0.01f;
-    const float PI = 3.14159265f;
-    if (phi < limit) phi = limit;
-    if (phi > PI - limit) phi = PI - limit;
+    // Travar pitch para não olhar de ponta-cabeça
+    if (pitch < -89.0f) pitch = -89.0f;
+    if (pitch > 89.0f)  pitch = 89.0f;
 
     updateCartesianFromSpherical();
 }
 
 void Terrain::zoomCamera(float dRadius)
 {
-    radius += dRadius;
-    if (radius < 5.0f) radius = 5.0f;
-    if (radius > 1000.0f) radius = 1000.0f;
-
-    updateCartesianFromSpherical();
+    // Zoom em câmera livre move a posição frontalmente (aproxima ou afasta)
+    increaseCameraPosition(0.f, 0.f, -dRadius);
 }
 
 void Terrain::updateCartesianFromSpherical(void)
 {
-    x = tx + radius * sin(phi) * cos(theta);
-    y = ty + radius * cos(phi);
-    z = tz + radius * sin(phi) * sin(theta);
+    glm::vec3 f;
+    f.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+    f.y = sin(glm::radians(pitch));
+    f.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+    glm::vec3 forward = glm::normalize(f);
+
+    // O alvo (target) é simplesmente a posição da câmera + vetor direção
+    tx = x + forward.x;
+    ty = y + forward.y;
+    tz = z + forward.z;
 }
