@@ -24,6 +24,8 @@ static void cursorPosCallback(GLFWwindow* window, double x, double y)
     // Botão mantido pressionado = drag
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT)   == GLFW_PRESS)
         game->mouseDragged((int)x, (int)y, 0);
+    else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
+        game->mouseDragged((int)x, (int)y, 1);
     else if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
         game->mouseDragged((int)x, (int)y, 2);
     else

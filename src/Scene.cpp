@@ -149,24 +149,58 @@ void Scene::keyReleased(int key)
 	}
 }
 
+static int lastMouseX = 0;
+static int lastMouseY = 0;
+static bool isOrbiting = false;
+
 void Scene::mouseMoved(int x, int y)
 {
 }
 
 void Scene::mouseDragged(int x, int y, int button)
 {
+	if (isOrbiting)
+	{
+		float dx = (float)(x - lastMouseX);
+		float dy = (float)(y - lastMouseY);
+		lastMouseX = x;
+		lastMouseY = y;
+
+		// Rotacionar câmera orbital
+		// Sensibilidade: 0.005 radianos por pixel
+		this->terrain->orbitCamera(-dx * 0.005f, -dy * 0.005f);
+	}
 }
 
 void Scene::mousePressed(int x, int y, int button)
 {
+	lastMouseX = x;
+	lastMouseY = y;
+	isOrbiting = true;
 }
 
 void Scene::mouseReleased(int x, int y, int button)
 {
+	isOrbiting = false;
 }
 
 void Scene::mouseScrolled(double xoffset, double yoffset)
 {
-	if (this->decorator)
+	GLFWwindow* window = glfwGetCurrentContext();
+	bool isCtrlPressed = false;
+	if (window)
+	{
+		isCtrlPressed = (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || 
+		                 glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS);
+	}
+
+	if (this->decorator && !isCtrlPressed)
+	{
 		this->decorator->mouseScrolled(xoffset, yoffset);
+	}
+	else
+	{
+		// Zoom da câmera orbital: Sensibilidade de 2 unidades por tick de scroll
+		this->terrain->zoomCamera(-yoffset * 2.0f);
+	}
 }

@@ -7,6 +7,9 @@ Terrain::Terrain(void)
     , tessLevelOuter(64)
     , x(0.f), y(40.f), z(60.f)
     , tx(0.f), ty(0.f), tz(0.f)
+    , radius(72.1110255f)
+    , theta(1.57079632f) // pi/2
+    , phi(0.98279372f)
     , bWireframe(false)
     , bRotate(false)
     , angle(0.f)
@@ -122,8 +125,37 @@ bool  Terrain::getWireframe(void)          { return bWireframe; }
 void  Terrain::setAngle(float a)           { angle = a; }
 float Terrain::getAngle(void)              { return angle; }
 
-void Terrain::setCameraPosition(float cx, float cy, float cz) { x=cx; y=cy; z=cz; }
-void Terrain::setCameraTarget  (float cx, float cy, float cz) { tx=cx; ty=cy; tz=cz; }
+void Terrain::setCameraPosition(float cx, float cy, float cz)
+{
+    x = cx;
+    y = cy;
+    z = cz;
+
+    // Recalcular coordenadas esféricas
+    float dx = x - tx;
+    float dy = y - ty;
+    float dz = z - tz;
+    radius = sqrt(dx*dx + dy*dy + dz*dz);
+    if (radius < 0.001f) radius = 0.001f;
+    phi = acos(glm::clamp(dy / radius, -1.f, 1.f));
+    theta = atan2(dz, dx);
+}
+
+void Terrain::setCameraTarget(float cx, float cy, float cz)
+{
+    tx = cx;
+    ty = cy;
+    tz = cz;
+
+    // Recalcular coordenadas esféricas
+    float dx = x - tx;
+    float dy = y - ty;
+    float dz = z - tz;
+    radius = sqrt(dx*dx + dy*dy + dz*dz);
+    if (radius < 0.001f) radius = 0.001f;
+    phi = acos(glm::clamp(dy / radius, -1.f, 1.f));
+    theta = atan2(dz, dx);
+}
 
 void Terrain::setTessellationFactor(int inner, int outer)
 {
@@ -143,5 +175,52 @@ void Terrain::decreaseTessellationFactor(int di, int dout)
     tessLevelOuter = std::max(tessLevelOuter - dout, 1);
 }
 
-void Terrain::increaseCameraPosition(float dx, float dy, float dz) { x+=dx; y+=dy; z+=dz; }
-void Terrain::decreaseCameraPosition(float dx, float dy, float dz) { x-=dx; y-=dy; z-=dz; }
+void Terrain::increaseCameraPosition(float dx, float dy, float dz)
+{
+    tx += dx;
+    ty += dy;
+    tz += dz;
+    x += dx;
+    y += dy;
+    z += dz;
+}
+
+void Terrain::decreaseCameraPosition(float dx, float dy, float dz)
+{
+    tx -= dx;
+    ty -= dy;
+    tz -= dz;
+    x -= dx;
+    y -= dy;
+    z -= dz;
+}
+
+void Terrain::orbitCamera(float dTheta, float dPhi)
+{
+    theta += dTheta;
+    phi += dPhi;
+
+    // Travar phi um pouco antes dos polos (0.01 a pi - 0.01) para evitar inversão
+    const float limit = 0.01f;
+    const float PI = 3.14159265f;
+    if (phi < limit) phi = limit;
+    if (phi > PI - limit) phi = PI - limit;
+
+    updateCartesianFromSpherical();
+}
+
+void Terrain::zoomCamera(float dRadius)
+{
+    radius += dRadius;
+    if (radius < 5.0f) radius = 5.0f;
+    if (radius > 1000.0f) radius = 1000.0f;
+
+    updateCartesianFromSpherical();
+}
+
+void Terrain::updateCartesianFromSpherical(void)
+{
+    x = tx + radius * sin(phi) * cos(theta);
+    y = ty + radius * cos(phi);
+    z = tz + radius * sin(phi) * sin(theta);
+}

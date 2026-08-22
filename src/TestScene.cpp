@@ -97,17 +97,38 @@ void TestScene::mouseMoved(int x, int y)
 
 void TestScene::mouseDragged(int x, int y, int button)
 {
-	this->decorator->mouseDragged(x, y, button);
+	if (button == 1)
+	{
+		Scene::mouseDragged(x, y, button);
+	}
+	else
+	{
+		this->decorator->mouseDragged(x, y, button);
+	}
 }
 
 
 void TestScene::mousePressed(int x, int y, int button)
 {
-	this->decorator->mousePressed(x, y, button);
+	if (button == 1)
+	{
+		Scene::mousePressed(x, y, button);
+	}
+	else
+	{
+		this->decorator->mousePressed(x, y, button);
+	}
 }
 
 
 void TestScene::mouseReleased(int x, int y, int button)
 {
-	this->decorator->mouseReleased(x, y, button);
+	if (button == 1)
+	{
+		Scene::mouseReleased(x, y, button);
+	}
+	else
+	{
+		this->decorator->mouseReleased(x, y, button);
+	}
 }
