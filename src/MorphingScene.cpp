@@ -25,9 +25,9 @@ MorphingScene::MorphingScene(DisplacementStage * displacementStage)
 	//	this->morphingStart = new Texture("testMap.png");
 	//}
 
-	this->morphingStart = new Texture("data/sourceMorphing.png");
-	this->morphingEnd   = new Texture("data/destinyMorphing.png");
-	this->displacementMap = new DisplacementMap("data/morphingMap.png");
+	this->morphingStart = new Texture("data/textures/sourceMorphing.png");
+	this->morphingEnd   = new Texture("data/textures/destinyMorphing.png");
+	this->displacementMap = new DisplacementMap("data/textures/morphingMap.png");
 
 	//for (int i = 0; i < 1000; i++)
 	//	this->interoperability->registerSourceMorphing( this->morphingStart->getID(),   this->displacementStage);

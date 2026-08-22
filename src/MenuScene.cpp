@@ -4,7 +4,7 @@
 MenuScene::MenuScene(DisplacementStage * displacementStage)
 	: Scene(displacementStage)
 {
-	this->image = new Texture("data/menu.png");
+	this->image = new Texture("data/textures/menu.png");
 	this->initQuad();
 }
 

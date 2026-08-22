@@ -16,7 +16,7 @@ CustomScene::CustomScene(DisplacementStage * displacementStage)
 
 	//this->morphingStart = new Texture("sourceMorphing.png");
 	//this->morphingEnd   = new Texture("destinyMorphing.png");
-	this->displacementMap = new DisplacementMap("data/customMap.png");
+	this->displacementMap = new DisplacementMap("data/textures/customMap.png");
 
 	//this->interoperability->registerSourceMorphing( this->morphingStart->getID(),   this->displacementStage);
 	//this->interoperability->registerDestinyMorphing(this->morphingEnd->getID(),     this->displacementStage);

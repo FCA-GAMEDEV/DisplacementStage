@@ -9,7 +9,7 @@ TestScene::TestScene(DisplacementStage * displacementStage)
 	this->terrain->setCameraPosition(0,40,60);
 	this->terrain->setCameraTarget(0,0,0);
 
-	this->displacementMap = new DisplacementMap("data/testMap.png");
+	this->displacementMap = new DisplacementMap("data/textures/testMap.png");
 
 	this->interoperability->registerDisplacementMap(this->displacementMap->getID(), this->displacementStage);
 	

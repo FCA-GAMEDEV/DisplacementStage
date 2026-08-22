@@ -164,13 +164,16 @@ cmake --build build --config Release
 
 ```
 DisplacementStage/
-├── bin/data/              # Shaders (GLSL), texturas e mapas de altura
-├── docs/                  # Dissertação de Mestrado, artigos e documentação técnica
+├── bin/data/              # Recursos de runtime (fontes, texturas, kernels)
+│   ├── fonts/             # Fontes (.ttf)
+│   ├── kernels/           # Simulação física em OpenCL (.cl)
+│   ├── textures/          # Texturas e mapas de altura (.png)
+│   └── dmap/              # Capturas de tela históricas
+├── docs/                  # Dissertação de Mestrado e artigos científicos
 │   ├── dissertacao_FCA.pdf
 │   └── sbgames_FCA.pdf
-├── src/                   # Código-fonte em C++ e kernels OpenCL (.cl)
+├── src/                   # Código-fonte em C++ (Lógica do Motor & Cenas)
 │   ├── DisplacementStage.cpp
-│   ├── displacementStage.cl
 │   └── ...
 ├── vendor/                # Dependências de cabeçalho único (stb_image, etc.)
 ├── CMakeLists.txt         # Configuração de build multiplataforma

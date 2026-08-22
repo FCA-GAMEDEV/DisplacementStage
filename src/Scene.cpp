@@ -18,8 +18,8 @@ Scene::Scene(DisplacementStage * displacementStage)
 	if(!Scene::displacementStage) Scene::displacementStage = displacementStage;
 	if(!Scene::shaderManager)     Scene::shaderManager = &ShaderManager::getInstance();
 	if(!Scene::terrain)           Scene::terrain = new Terrain;
-	if(!Scene::texture)           Scene::texture = new Texture("data/texture.png");
-	if(!Scene::displacementMap)   Scene::displacementMap = new DisplacementMap("data/generalMap.png");
+	if(!Scene::texture)           Scene::texture = new Texture("data/textures/texture.png");
+	if(!Scene::displacementMap)   Scene::displacementMap = new DisplacementMap("data/textures/generalMap.png");
 	if(!Scene::interoperability)  Scene::interoperability = new Interoperability;
 
 	this->terrain->setWireframe(false);

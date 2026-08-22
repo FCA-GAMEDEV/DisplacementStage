@@ -52,7 +52,7 @@ void SceneManager::setup(void)
 	//		delete this->displacementStage;
 	//		this->displacementStage = NULL;
 	//	}
-		this->displacementStage = new DisplacementStage("data/displacementStage.cl");
+		this->displacementStage = new DisplacementStage("data/kernels/displacementStage.cl");
 		
 	//}
 

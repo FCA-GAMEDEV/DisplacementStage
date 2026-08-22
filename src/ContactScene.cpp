@@ -35,7 +35,7 @@ ContactScene::~ContactScene(void)
 
 void ContactScene::setup(void)
 {
-	this->displacementMap = new DisplacementMap("data/contactMap.png");
+	this->displacementMap = new DisplacementMap("data/textures/contactMap.png");
 
 	this->interoperability->registerDisplacementMap(this->displacementMap->getID(), this->displacementStage);
 

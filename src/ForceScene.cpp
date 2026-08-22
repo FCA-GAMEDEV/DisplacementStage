@@ -34,7 +34,7 @@ ForceScene::~ForceScene(void)
 
 void ForceScene::setup(void)
 {
-	this->displacementMap = new DisplacementMap("data/forceMap.png");
+	this->displacementMap = new DisplacementMap("data/textures/forceMap.png");
 
 	this->interoperability->registerDisplacementMap(this->displacementMap->getID(), this->displacementStage);
 
