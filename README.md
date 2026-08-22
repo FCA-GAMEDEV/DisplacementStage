@@ -55,26 +55,32 @@ A robustez desta separação em 3 camadas foi colocada à prova durante o proces
 
 ## 🧪 Cenas e Kernels de Validação
 
-A arquitetura desacopla os algoritmos de deformação através de 5 cenas/kernels especializados:
+A arquitetura foi projetada para demonstrar a separação física/visual através de **4 cenas base** e **1 cena de prova de conceito autoral**, validando a facilidade de extensão do sistema:
 
-### 1. Contact Scene (Cena 1 - Contato)
+### 📦 Cenas Base (Física Pré-definida)
+
+#### 1. Contact Scene (Cena 1 - Contato)
 Rastreamento e gravação contínua de marcas e trilhas deixadas por entidades móveis (esferas físicas) sobre o terreno.
 ![Contact Scene](docs/figures/scene1.png)
 
-### 2. Force Scene (Cena 2 - Forças e Impactos)
+#### 2. Force Scene (Cena 2 - Forças e Impactos)
 Simulação paramétrica de deformações causadas por vetores de força e impulsos pontuais tridimensionais (crateras e explosões).
 ![Force Scene](docs/figures/scene2.png)
 
-### 3. Morphing Scene (Cena 3 - Transição Topológica)
+#### 3. Morphing Scene (Cena 3 - Transição Topológica)
 Interpolação temporal contínua e fluida entre duas matrizes de relevo distintas.
 ![Morphing Scene](docs/figures/scene3.png)
 
-### 4. Custom Scene (Cena 4 - Esqueleto Didático de Customização)
-Ponto de partida desacoplado (princípio *Open-Closed*) para desenvolvedores implementarem novos kernels customizados sem alterar o motor gráfico principal.
+---
+
+### 🧩 Extensibilidade e Criação Autoral
+
+#### 4. Custom Scene (Cena 4 - Esqueleto Didático de Customização)
+Um modelo de partida limpo e desacoplado (princípio *Open-Closed*). Ele serve como esqueleto didático para que novos desenvolvedores implementem suas próprias lógicas físicas no OpenCL (`displacementStage.cl`) sem precisar alterar o motor gráfico principal em C++/OpenGL.
 ![Custom Scene](docs/figures/scene4.png)
 
-### 5. Test Scene (Cena 5 - Escultura Interativa)
-Ferramenta de edição e escultura em tempo real guiada por pincel circular, suportando deformações positivas (elevação) e negativas (rebaixamento/cratera) multicanal (RGB).
+#### 5. Test Scene (Cena 5 - Prova Prática de Extensibilidade)
+A prova de conceito e validação de que o esqueleto da **Cena 4** realmente funciona. Trata-se de uma ferramenta autoral completa de edição e escultura em tempo real orientada por um pincel circular interativo (deformações positivas e negativas nos canais RGB), demonstrando a implementação de uma lógica física customizada sobre a estrutura base.
 ![Test Scene](docs/figures/scene5.png)
 
 ---
