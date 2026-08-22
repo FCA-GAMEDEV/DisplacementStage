@@ -18,8 +18,8 @@ A arquitetura é dividida em 5 cenas de validação de *kernels* especializados:
 1. **Contact Scene (Contato)**: Rastreamento e gravação contínua de marcas/trilhas deixadas por entidades móveis (esferas físicas) sobre o terreno.
 2. **Force Scene (Forças)**: Simulação paramétrica de impactos localizados, explosões e crateras causadas por impulsos vetoriais tridimensionais.
 3. **Morphing Scene (Transição)**: Interpolação temporal fluida entre duas topologias de relevos distintas (ex: desmoronamento ou abertura de passagens).
-4. **Custom Scene (Escultura)**: Permite pintura e deformação interativa do terreno em tempo real.
-5. **Test Scene (Pincel Interativo)**: Interface interativa guiada por um pincel (círculo indicador ao redor do cursor) que permite esculpir relevos positivos e negativos dinamicamente.
+4. **Custom Scene (Esqueleto para Customização)**: Uma cena modelo sem efeito de deformação visual, projetada como ponto de partida didático para novos desenvolvedores criarem seus próprios kernels personalizados.
+5. **Test Scene (Pincel Interativo / Escultura)**: A cena de deformação interativa e pintura livre, guiada por um pincel circular controlado pelo mouse, permitindo esculpir relevos positivos e negativos na malha 3D.
 
 ---
 
@@ -78,17 +78,17 @@ Os arquivos científicos originais do mestrado estão catalogados e linkados na 
 
 ## 📸 Demonstração dos Kernels
 
-### 1. Contact Kernel (Deformação por Contato)
-`![Contact Kernel](docs/figures/scene1.png)`
+### 1. Contact Scene (Deformação por Contato)
+![Contact Scene](docs/figures/scene1.png)
 
-### 2. Force Kernel (Impacto de Forças)
-`![Force Kernel](docs/figures/scene2.png)`
+### 2. Force Scene (Impacto de Forças)
+![Force Scene](docs/figures/scene2.png)
 
-### 3. Morphing Kernel (Transições de Topologia)
-`![Morphing Kernel](docs/figures/scene3.png)`
+### 3. Morphing Scene (Transições de Topologia)
+![Morphing Scene](docs/figures/scene3.png)
 
-### 4. Custom Kernel (Pintura de Relevo)
-`![Custom Kernel](docs/figures/scene4.png)`
+### 4. Custom Scene (Cena Esqueleto de Customização)
+![Custom Scene](docs/figures/scene4.png)
 
-### 5. Test Scene (Escultura Interativa)
-`![Test Scene](docs/figures/scene5.png)`
+### 5. Test Scene (Pincel Interativo / Escultura)
+![Test Scene](docs/figures/scene5.png)
