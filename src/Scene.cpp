@@ -94,28 +94,28 @@ void Scene::keyPressed(int key)
 	if (key == GLFW_KEY_F6)
 		this->terrain->increaseTessellationFactor(1,1);
 
-	if (key == GLFW_KEY_PAGE_UP)
+	if (key == GLFW_KEY_E)
 		this->terrain->increaseCameraPosition(0,1,0);
 
-	if (key == GLFW_KEY_PAGE_DOWN)
+	if (key == GLFW_KEY_Q)
 		this->terrain->decreaseCameraPosition(0,1,0);
 
-	if (key == GLFW_KEY_UP)
+	if (key == GLFW_KEY_W)
 		this->terrain->decreaseCameraPosition(0,0,1);
 
-	if (key == GLFW_KEY_DOWN)
+	if (key == GLFW_KEY_S)
 		this->terrain->increaseCameraPosition(0,0,1);
 
-	if (key == GLFW_KEY_RIGHT)
+	if (key == GLFW_KEY_D)
 		this->terrain->increaseCameraPosition(1,0,0);
 
-	if (key == GLFW_KEY_LEFT)
+	if (key == GLFW_KEY_A)
 		this->terrain->decreaseCameraPosition(1,0,0);
 }
 
 void Scene::keyReleased(int key)
 {
-	if (key == 'W' || key == 'w') 
+	if (key == GLFW_KEY_F11) 
 		this->terrain->setWireframe(!this->terrain->getWireframe());
 
 	if (key == 'R' || key == 'r') 
@@ -124,7 +124,7 @@ void Scene::keyReleased(int key)
 	if (key == 'P' || key == 'p') 
 		this->bPause = !this->bPause;
 
-	if (key == 'D' || key == 'd')
+	if (key == GLFW_KEY_F12)
 		this->bShowDecorator = !this->bShowDecorator;
 
 	if (key == 'S' || key == 's')
