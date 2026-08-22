@@ -109,16 +109,16 @@ A prova de conceito e validação de que o esqueleto da **Cena 4** realmente fun
 * **`Espaço`:** Retorna ao Menu Principal (Cena 0).
 * **`ESC`:** Fecha a aplicação imediatamente.
 
-### Câmera e Visualização
+### Câmera, Visualização e Depuração
 * **`Setas (↑ ↓ ← →)`:** Movimentam a câmera pelo espaço 3D (frente, trás e laterais).
 * **`Page Up` / `Page Down`:** Eleva ou abaixa a altura da câmera (Eixo Y).
 * **`W`:** Alterna a exibição em modo *Wireframe* (linhas de grade).
 * **`R`:** Liga/Desliga a rotação automática da malha 3D.
 * **`P`:** Pausa/Retoma o cálculo de deformação física no OpenCL.
 * **`S`:** Salva captura em alta definição (.png) da textura de deformação atual na pasta `bin/data/dmap/`.
+* **`D`:** Ativa/Desativa o modo de depuração visual (exibe o mini-mapa 2D no canto da tela com a textura de deslocamento na VRAM compartilhada). Esta visualização geral foi implementada utilizando o padrão de projeto **Decorator**, permitindo inspecionar em tempo real o buffer de textura que influencia a deformação da malha 3D em qualquer uma das cenas.
 
 ### Escultura e Pincel Interativo (Cena 5 - Test Scene)
-* **`D`:** Liga/Desliga a exibição do pincel circular interativo e do mini-mapa 2D.
 * **`Scroll do Mouse` ou `+ / -`:** Ajusta o raio de ação do pincel de deformação.
 * **`Clique Esquerdo + Arrastar`:** Aplica deformação positiva (elevação/escultura do relevo).
 * **`Clique Direito + Arrastar`:** Aplica deformação negativa (depressão/escultura de cratera).
