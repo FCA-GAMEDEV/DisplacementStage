@@ -177,22 +177,54 @@ void Terrain::decreaseTessellationFactor(int di, int dout)
 
 void Terrain::increaseCameraPosition(float dx, float dy, float dz)
 {
-    tx += dx;
-    ty += dy;
-    tz += dz;
-    x += dx;
-    y += dy;
-    z += dz;
+    // dx: movimento lateral (right/left)
+    // dy: movimento vertical (up/down)
+    // dz: movimento frontal (forward/backward)
+
+    glm::vec3 camPos(x, y, z);
+    glm::vec3 camTarget(tx, ty, tz);
+
+    // Vetor forward projetado no plano horizontal XZ
+    glm::vec3 forward = camTarget - camPos;
+    forward.y = 0.f;
+    if (glm::length(forward) > 0.001f)
+    {
+        forward = glm::normalize(forward);
+    }
+    else
+    {
+        forward = glm::vec3(0.f, 0.f, -1.f);
+    }
+
+    // Vetor right perpendicular ao forward e ao up global (0, 1, 0)
+    glm::vec3 right = glm::cross(forward, glm::vec3(0.f, 1.f, 0.f));
+    if (glm::length(right) > 0.001f)
+    {
+        right = glm::normalize(right);
+    }
+    else
+    {
+        right = glm::vec3(1.f, 0.f, 0.f);
+    }
+
+    // Vetor up global
+    glm::vec3 up(0.f, 1.f, 0.f);
+
+    // Calcular deslocamento final
+    glm::vec3 displacement = right * dx + up * dy + forward * dz;
+
+    // Aplicar a translação ao alvo (target) e à posição da câmera
+    tx += displacement.x;
+    ty += displacement.y;
+    tz += displacement.z;
+    x += displacement.x;
+    y += displacement.y;
+    z += displacement.z;
 }
 
 void Terrain::decreaseCameraPosition(float dx, float dy, float dz)
 {
-    tx -= dx;
-    ty -= dy;
-    tz -= dz;
-    x -= dx;
-    y -= dy;
-    z -= dz;
+    increaseCameraPosition(-dx, -dy, -dz);
 }
 
 void Terrain::orbitCamera(float dTheta, float dPhi)

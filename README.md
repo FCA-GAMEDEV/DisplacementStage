@@ -112,10 +112,10 @@ A prova de conceito e validação de que o esqueleto da **Cena 4** realmente fun
 ### Câmera, Visualização e Depuração
 * **`Botão do Meio do Mouse (Scroll Press) + Arrastar`:** Orbita a câmera livremente ao redor do terreno (câmera esférica/Arcball). Nos menus e nas Cenas 1-4, arrastar com o clique esquerdo ou direito também orbita.
 * **`Scroll do Mouse`:** Dá zoom (aproxima/afasta) na câmera. Na **Cena 5 (Test Scene)**, segure a tecla **`Ctrl` + Scroll** para dar zoom.
-* **`W` / `S` / `A` / `D`:** Movem o alvo/foco da câmera no plano do solo (frente, trás, esquerda, direita).
+* **`W` / `S` / `A` / `D`:** Movem o alvo/foco da câmera no plano do solo (frente, trás, esquerda, direita) de forma **relativa à orientação atual da visualização**.
 * **`E` / `Q`:** Eleva ou abaixa a altura do alvo da câmera (eixo Y).
 * **`F11`:** Alterna a exibição em modo *Wireframe* (linhas de grade).
-* **`F12`:** Ativa/Desativa o modo de depuração visual (exibe o mini-mapa 2D no canto da tela com a textura de deslocamento na VRAM compartilhada). Esta visualização geral foi implementada utilizando o padrão de projeto **Decorator**, permitindo inspecionar em tempo real o buffer de textura que influencia a deformação da malha 3D em qualquer uma das cenas.
+* **`F9`:** Ativa/Desativa o modo de depuração visual (exibe o mini-mapa 2D no canto da tela com a textura de deslocamento na VRAM compartilhada). Esta visualização geral foi implementada utilizando o padrão de projeto **Decorator**, permitindo inspecionar em tempo real o buffer de textura que influencia a deformação da malha 3D em qualquer uma das cenas.
 * **`R`:** Liga/Desliga a rotação automática da malha 3D.
 * **`P`:** Pausa/Retoma o cálculo de deformação física no OpenCL.
 * **`S`:** Salva captura em alta definição (.png) da textura de deformação atual na pasta `bin/data/dmap/`.
