@@ -41,6 +41,38 @@ A tabela abaixo resume a profunda modernização feita na arquitetura original p
 
 ---
 
+## 🎮 Guia de Controles (Teclado e Mouse)
+Ao iniciar a aplicação, as instruções de controles serão impressas na janela do console auxiliar. Abaixo está o resumo dos comandos utilizáveis:
+
+### Navegação Geral
+* **`1` a `5`**: Alterna entre as cenas de validação dos *kernels*.
+* **`Espaço`**: Retorna ao **Menu Principal** (Cena 0).
+* **`ESC`**: Fecha a aplicação imediatamente.
+
+### Controles de Câmera (Visualização)
+* **Setas direcionais (`←`, `↑`, `↓`, `→`)**: Movimentam a câmera pelo espaço tridimensional (frente, trás e laterais).
+* **`Page Up` / `Page Down`**: Eleva ou abaixa a altura da câmera.
+
+### Controles do Terreno 3D
+* **`W`**: Ativa/Desativa a exibição em modo **Wireframe** (linhas de grade).
+* **`R`**: Ativa/Desativa a **rotação automática** da malha tridimensional.
+* **`P`**: **Pausa/Despausa** o processamento físico de deformação do OpenCL.
+* **`S`**: Salva uma captura de tela em alta definição (`.png`) da textura de deformação atual na pasta `/data/dmap`.
+
+### Controles de Escultura / Pincel (Cena 5 - Test Scene)
+* **`D`**: Liga/Desliga a exibição do pincel circular interativo e do mini-mapa 2D no canto da tela.
+* **`Scroll do Mouse` (ou teclas `+` e `-`)**: Ajusta o tamanho do raio do pincel de deformação.
+* **`Clique Esquerdo + Arrastar`**: Aplica deformação **positiva** (elevação/escultura do relevo).
+* **`Clique Direito + Arrastar`**: Aplica deformação **negativa** (depressão/escultura de cratera).
+* **`8`, `9` ou `0`**: Modifica a deformação física do canal RGB selecionado (Vermelho, Verde ou Azul).
+
+### Controles de Tesselação (Subdivisão de Malha na GPU)
+* **`F1` / `F2`**: Diminui / Aumenta o fator de Tessellation Interno.
+* **`F3` / `F4`**: Diminui / Aumenta o fator de Tessellation Externo.
+* **`F5` / `F6`**: Diminui / Aumenta ambos os fatores simultaneamente.
+
+---
+
 ## 🚀 Como Compilar e Executar
 
 ### Pré-requisitos
