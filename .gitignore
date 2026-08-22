@@ -1,0 +1,36 @@
+# CMake build directory
+build/
+.vs/
+out/
+
+# Legacy Visual Studio files
+*.sdf
+*.suo
+*.user
+*.psess
+*.cd
+ipch/
+obj/
+ProfilerOutput/
+Game.sln
+emptyExample.vcxproj
+
+# Legacy compiled binaries and libraries in bin/
+bin/*.exe
+bin/*.dll
+bin/*.ilk
+bin/*.pdb
+bin/*.lib
+bin/*.exp
+
+# Legacy test directories in bin/
+bin/00_Testes/
+bin/01_ContactTestes/
+bin/02_ForceTestes/
+bin/03_MorphingTestes/
+bin/04_CustomTestes/
+bin/05_TestTestes/
+
+# OS specific files
+.DS_Store
+Thumbs.db
