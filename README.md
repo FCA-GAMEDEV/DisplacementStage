@@ -143,7 +143,7 @@ A prova de conceito e validação de que o esqueleto da **Cena 4** realmente fun
 | **EVEN SPACING** | Amarelo | Tessellation com partição par fracionária suave — **padrão ativo** |
 | **ODD SPACING** | Roxo | Tessellation com partição ímpar fracionária suave |
 
-> **Nota:** EVEN e ODD funcionam como radio buttons — um dos dois estará sempre activo. Clicar em ODD quando já está activo regressa ao EVEN.
+> **Nota:** EVEN e ODD funcionam como radio buttons — um dos dois estará sempre activo. Clicar no que já está activo não faz nada; para mudar, clique no que está inactivo.
 
 ### Escultura e Pincel Interativo (Cena 5 - Test Scene)
 * **`Scroll do Mouse` ou `+ / -`:** Ajusta o raio de ação do pincel de deformação.
