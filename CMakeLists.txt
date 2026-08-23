@@ -14,6 +14,7 @@ find_package(OpenCL REQUIRED)   # fornecido pelo CUDA Toolkit
 # ── Fontes ────────────────────────────────────────────────────
 set(SOURCES
     src/ContactScene.cpp
+    src/Camera.cpp
     src/CustomScene.cpp
     src/DisplacementMap.cpp
     src/DisplacementStage.cpp

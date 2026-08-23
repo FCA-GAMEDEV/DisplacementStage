@@ -13,39 +13,29 @@ public:
     Terrain(void);
     ~Terrain(void);
 
-    void draw(ShaderManager* shaderManager, Texture* texture, DisplacementMap* displacementMap);
+    void draw(ShaderManager* shaderManager, Texture* texture, DisplacementMap* displacementMap, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
     void setRotate(bool rotate);
     bool getRotate(void);
     void setWireframe(bool wireframe);
     bool getWireframe(void);
-    void setCameraPosition(float x, float y, float z);
-    void setCameraTarget(float x, float y, float z);
+    void setCullFace(bool cullFace);
+    bool getCullFace(void);
     void setTessellationFactor(int inner, int outer);
     void increaseTessellationFactor(int innerPass, int outerPass);
     void decreaseTessellationFactor(int innerPass, int outerPass);
     void setAngle(float angle);
     float getAngle(void);
-    void increaseCameraPosition(float xPass, float yPass, float zPass);
-    void decreaseCameraPosition(float xPass, float yPass, float zPass);
-    void orbitCamera(float dTheta, float dPhi);
-    void zoomCamera(float dRadius);
 
 private:
     void initVAO(void);
-    void updateCartesianFromSpherical(void);
 
     int   tessLevelInner;
     int   tessLevelOuter;
 
-    float x, y, z;      // posição da câmera
-    float tx, ty, tz;   // alvo da câmera
-
-    float yaw;          // rotação horizontal (olhar esquerda/direita)
-    float pitch;        // rotação vertical (olhar cima/baixo)
-
     bool  bWireframe;
     bool  bRotate;
+    bool  bCullFace;
     float angle;
 
     // VAO/VBO para o plano de 2 triângulos

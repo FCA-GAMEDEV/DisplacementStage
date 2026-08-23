@@ -28,7 +28,7 @@ Scene::Scene(DisplacementStage * displacementStage)
 	this->terrain->setTessellationFactor(64,64);
 
 	this->bPause = false;
-	this->decorator = NULL;
+	this->decorator = new Interface;
 	this->bShowDecorator = false;
 }
 
@@ -43,8 +43,8 @@ Scene::~Scene(void)
 
 void Scene::draw(void)
 {
-	if (this->bShowDecorator && this->decorator)
-		this->decorator->draw(this->shaderManager, this->displacementMap);
+	if (this->decorator)
+		this->decorator->draw(this->shaderManager, this->displacementMap, false, this->terrain->getWireframe(), this->terrain->getRotate(), this->terrain->getCullFace(), ShaderManager::getInstance().getTessellationScheme(), this->bShowDecorator);
 }
 
 void Scene::clear(void)
@@ -93,28 +93,61 @@ void Scene::keyPressed(int key)
 
 	if (key == GLFW_KEY_F6)
 		this->terrain->increaseTessellationFactor(1,1);
+}
 
-	if (key == GLFW_KEY_E)
-		this->terrain->increaseCameraPosition(0, 1, 0);
+void Scene::updateCamera(void)
+{
+	if (this->decorator)
+	{
+		if (this->decorator->checkAndResetWireframeToggle())
+			this->terrain->setWireframe(!this->terrain->getWireframe());
 
-	if (key == GLFW_KEY_Q)
-		this->terrain->increaseCameraPosition(0, -1, 0);
+		if (this->decorator->checkAndResetRotationToggle())
+			this->terrain->setRotate(!this->terrain->getRotate());
 
-	if (key == GLFW_KEY_W)
-		this->terrain->increaseCameraPosition(0, 0, 1);
+		if (this->decorator->checkAndResetCullFaceToggle())
+			this->terrain->setCullFace(!this->terrain->getCullFace());
 
-	if (key == GLFW_KEY_S)
-		this->terrain->increaseCameraPosition(0, 0, -1);
+		if (this->decorator->checkAndResetEvenSpacingToggle())
+		{
+			// EVEN é o mínimo: se já está ativo, não faz nada (nunca fica sem seleção)
+			int current = ShaderManager::getInstance().getTessellationScheme();
+			if (current != 1)
+				ShaderManager::getInstance().setTessellationScheme(1);
+		}
 
-	if (key == GLFW_KEY_D)
-		this->terrain->increaseCameraPosition(1, 0, 0);
+		if (this->decorator->checkAndResetOddSpacingToggle())
+		{
+			// Se ODD já está ativo, volta para EVEN (nunca para Equal/0)
+			int current = ShaderManager::getInstance().getTessellationScheme();
+			ShaderManager::getInstance().setTessellationScheme(current == 2 ? 1 : 2);
+		}
+	}
 
-	if (key == GLFW_KEY_A)
-		this->terrain->increaseCameraPosition(-1, 0, 0);
+	GLFWwindow* window = glfwGetCurrentContext();
+	if (window)
+	{
+		float speed = 0.5f; // velocidade de movimento por frame
+		float dx = 0.f, dy = 0.f, dz = 0.f;
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) dz += speed;
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) dz -= speed;
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) dx -= speed;
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) dx += speed;
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) dy += speed;
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) dy -= speed;
+
+		if (dx != 0.f || dy != 0.f || dz != 0.f)
+		{
+			this->camera.move(dx, dy, dz);
+		}
+	}
 }
 
 void Scene::keyReleased(int key)
 {
+	if (key == GLFW_KEY_F7)
+		ShaderManager::getInstance().reloadShaders();
+
 	if (key == GLFW_KEY_F11) 
 		this->terrain->setWireframe(!this->terrain->getWireframe());
 
@@ -168,12 +201,23 @@ void Scene::mouseDragged(int x, int y, int button)
 
 		// Rotacionar visão da câmera (olhar ao redor)
 		// Sensibilidade: 0.003 radianos por pixel
-		this->terrain->orbitCamera(dx * 0.003f, -dy * 0.003f);
+		this->camera.orbit(dx * 0.003f, -dy * 0.003f);
 	}
 }
 
 void Scene::mousePressed(int x, int y, int button)
 {
+	if (this->decorator)
+	{
+		this->decorator->mousePressed(x, y, button);
+	}
+	
+	// Se for clique esquerdo na área dos checkboxes (x: 15..160, y: 334..459), não inicia órbita da câmera
+	if (button == 0 && x >= 15 && x <= 160 && y >= 334 && y <= 459)
+	{
+		return;
+	}
+
 	lastMouseX = x;
 	lastMouseY = y;
 	isOrbiting = true;
@@ -200,7 +244,7 @@ void Scene::mouseScrolled(double xoffset, double yoffset)
 	}
 	else
 	{
-		// Zoom da câmera orbital: Sensibilidade de 2 unidades por tick de scroll
-		this->terrain->zoomCamera(-yoffset * 2.0f);
+		// Zoom da câmera: Sensibilidade de 2 unidades por tick de scroll
+		this->camera.zoom(-yoffset * 2.0f);
 	}
 }
