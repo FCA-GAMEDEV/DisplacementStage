@@ -10,6 +10,7 @@
 #include "TimeManager.h"
 #include "Interoperability.h"
 #include "Interface.h"
+#include "Camera.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
 	virtual ~Scene(void);
 
 	virtual void update(void)=0;
+	void updateCamera(void);
 	virtual void draw(void);
 	virtual void keyPressed(int key);
 	virtual void keyReleased(int key);
@@ -41,6 +43,7 @@ protected:
 	bool bPause;
 
 	Interface * decorator;
+	Camera camera;
 
 	bool bShowDecorator;
 };

@@ -15,12 +15,8 @@ ForceScene::ForceScene(DisplacementStage * displacementStage)
 	this->force[3] = this->FORCE;
 	this->count = 0;
 
-	//this->terrain->setWireframe(false);
-	//this->terrain->setRotate(false);
-	this->terrain->setCameraPosition(0,30,60);
-	this->terrain->setCameraTarget(0,0,0);
-
-	this->decorator = new Interface;
+	this->camera.setPosition(0,30,60);
+	this->camera.setTarget(0,0,0);
 	
 	this->setup();
 }
@@ -98,7 +94,7 @@ void ForceScene::draw(void)
 {
 	//cout << "ForceScene::draw" << endl;
 
-	this->terrain->draw(this->shaderManager, this->texture, this->displacementMap);
+	this->terrain->draw(this->shaderManager, this->texture, this->displacementMap, this->camera.getViewMatrix(), this->camera.getProjectionMatrix(1024.f, 768.f));
 
 	Scene::draw();
 }

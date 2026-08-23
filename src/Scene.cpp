@@ -28,7 +28,7 @@ Scene::Scene(DisplacementStage * displacementStage)
 	this->terrain->setTessellationFactor(64,64);
 
 	this->bPause = false;
-	this->decorator = NULL;
+	this->decorator = new Interface;
 	this->bShowDecorator = false;
 }
 
@@ -43,8 +43,8 @@ Scene::~Scene(void)
 
 void Scene::draw(void)
 {
-	if (this->bShowDecorator && this->decorator)
-		this->decorator->draw(this->shaderManager, this->displacementMap);
+	if (this->decorator)
+		this->decorator->draw(this->shaderManager, this->displacementMap, false, this->terrain->getWireframe(), this->terrain->getRotate(), this->terrain->getCullFace(), ShaderManager::getInstance().getTessellationScheme(), this->bShowDecorator);
 }
 
 void Scene::clear(void)
@@ -93,29 +93,63 @@ void Scene::keyPressed(int key)
 
 	if (key == GLFW_KEY_F6)
 		this->terrain->increaseTessellationFactor(1,1);
+}
 
-	if (key == GLFW_KEY_PAGE_UP)
-		this->terrain->increaseCameraPosition(0,1,0);
+void Scene::updateCamera(void)
+{
+	if (this->decorator)
+	{
+		if (this->decorator->checkAndResetWireframeToggle())
+			this->terrain->setWireframe(!this->terrain->getWireframe());
 
-	if (key == GLFW_KEY_PAGE_DOWN)
-		this->terrain->decreaseCameraPosition(0,1,0);
+		if (this->decorator->checkAndResetRotationToggle())
+			this->terrain->setRotate(!this->terrain->getRotate());
 
-	if (key == GLFW_KEY_UP)
-		this->terrain->decreaseCameraPosition(0,0,1);
+		if (this->decorator->checkAndResetCullFaceToggle())
+			this->terrain->setCullFace(!this->terrain->getCullFace());
 
-	if (key == GLFW_KEY_DOWN)
-		this->terrain->increaseCameraPosition(0,0,1);
+		if (this->decorator->checkAndResetEvenSpacingToggle())
+		{
+			// EVEN é o mínimo: se já está ativo, não faz nada (nunca fica sem seleção)
+			int current = ShaderManager::getInstance().getTessellationScheme();
+			if (current != 1)
+				ShaderManager::getInstance().setTessellationScheme(1);
+		}
 
-	if (key == GLFW_KEY_RIGHT)
-		this->terrain->increaseCameraPosition(1,0,0);
+		if (this->decorator->checkAndResetOddSpacingToggle())
+		{
+			// Se ODD já está ativo, não faz nada — clicar no inativo é que muda
+			int current = ShaderManager::getInstance().getTessellationScheme();
+			if (current != 2)
+				ShaderManager::getInstance().setTessellationScheme(2);
+		}
+	}
 
-	if (key == GLFW_KEY_LEFT)
-		this->terrain->decreaseCameraPosition(1,0,0);
+	GLFWwindow* window = glfwGetCurrentContext();
+	if (window)
+	{
+		float speed = 0.5f; // velocidade de movimento por frame
+		float dx = 0.f, dy = 0.f, dz = 0.f;
+		if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) dz += speed;
+		if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) dz -= speed;
+		if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) dx -= speed;
+		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) dx += speed;
+		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) dy += speed;
+		if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) dy -= speed;
+
+		if (dx != 0.f || dy != 0.f || dz != 0.f)
+		{
+			this->camera.move(dx, dy, dz);
+		}
+	}
 }
 
 void Scene::keyReleased(int key)
 {
-	if (key == 'W' || key == 'w') 
+	if (key == GLFW_KEY_F7)
+		ShaderManager::getInstance().reloadShaders();
+
+	if (key == GLFW_KEY_F11) 
 		this->terrain->setWireframe(!this->terrain->getWireframe());
 
 	if (key == 'R' || key == 'r') 
@@ -124,10 +158,10 @@ void Scene::keyReleased(int key)
 	if (key == 'P' || key == 'p') 
 		this->bPause = !this->bPause;
 
-	if (key == 'D' || key == 'd')
+	if (key == GLFW_KEY_F9)
 		this->bShowDecorator = !this->bShowDecorator;
 
-	if (key == 'S' || key == 's')
+	if (key == 'M' || key == 'm')
 	{
 		unsigned char * _p = new unsigned char[64*64*4];
 		glActiveTexture(GL_TEXTURE1);
@@ -144,10 +178,15 @@ void Scene::keyReleased(int key)
 		stbi_write_png(path.c_str(), 64, 64, 4, _p, 64 * 4);
 
 		delete [] _p;
-		cout << "Imagem \"" << path.c_str() << "\" criada com sucesso!" << endl;
+
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
+
+static int lastMouseX = 0;
+static int lastMouseY = 0;
+static bool isOrbiting = false;
 
 void Scene::mouseMoved(int x, int y)
 {
@@ -155,18 +194,59 @@ void Scene::mouseMoved(int x, int y)
 
 void Scene::mouseDragged(int x, int y, int button)
 {
+	if (isOrbiting)
+	{
+		float dx = (float)(x - lastMouseX);
+		float dy = (float)(y - lastMouseY);
+		lastMouseX = x;
+		lastMouseY = y;
+
+		// Rotacionar visão da câmera (olhar ao redor)
+		// Sensibilidade: 0.003 radianos por pixel
+		this->camera.orbit(dx * 0.003f, -dy * 0.003f);
+	}
 }
 
 void Scene::mousePressed(int x, int y, int button)
 {
+	if (this->decorator)
+	{
+		this->decorator->mousePressed(x, y, button);
+	}
+	
+	// Se for clique esquerdo na área dos checkboxes (x: 15..160, y: 334..459), não inicia órbita da câmera
+	if (button == 0 && x >= 15 && x <= 160 && y >= 334 && y <= 459)
+	{
+		return;
+	}
+
+	lastMouseX = x;
+	lastMouseY = y;
+	isOrbiting = true;
 }
 
 void Scene::mouseReleased(int x, int y, int button)
 {
+	isOrbiting = false;
 }
 
 void Scene::mouseScrolled(double xoffset, double yoffset)
 {
-	if (this->decorator)
+	GLFWwindow* window = glfwGetCurrentContext();
+	bool isCtrlPressed = false;
+	if (window)
+	{
+		isCtrlPressed = (glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS || 
+		                 glfwGetKey(window, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS);
+	}
+
+	if (this->decorator && !isCtrlPressed)
+	{
 		this->decorator->mouseScrolled(xoffset, yoffset);
+	}
+	else
+	{
+		// Zoom da câmera: Sensibilidade de 2 unidades por tick de scroll
+		this->camera.zoom(-yoffset * 2.0f);
+	}
 }

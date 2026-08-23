@@ -9,10 +9,8 @@ CustomScene::CustomScene(DisplacementStage * displacementStage)
 	//this->angle = 0;
 	//this->time = 0;
 
-	////this->terrain->setWireframe(false);
-	////this->terrain->setRotate(false);
-	this->terrain->setCameraPosition(0,20,60);
-	this->terrain->setCameraTarget(0,0,0);
+	this->camera.setPosition(0,20,60);
+	this->camera.setTarget(0,0,0);
 
 	//this->morphingStart = new Texture("sourceMorphing.png");
 	//this->morphingEnd   = new Texture("destinyMorphing.png");
@@ -68,7 +66,7 @@ void CustomScene::draw(void)
 {
 	//cout << "MorphingScene::draw" << endl;
 	
-	this->terrain->draw(this->shaderManager, this->texture, this->displacementMap);
+	this->terrain->draw(this->shaderManager, this->texture, this->displacementMap, this->camera.getViewMatrix(), this->camera.getProjectionMatrix(1024.f, 768.f));
 
 	Scene::draw();
 }

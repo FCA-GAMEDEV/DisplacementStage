@@ -81,7 +81,12 @@ Um modelo de partida limpo e desacoplado (princípio *Open-Closed*). Ele serve c
 
 #### 5. Test Scene (Cena 5 - Prova Prática de Extensibilidade)
 A prova de conceito e validação de que o esqueleto da **Cena 4** realmente funciona. Trata-se de uma ferramenta autoral completa de edição e escultura em tempo real orientada por um pincel circular interativo (deformações positivas e negativas nos canais RGB), demonstrando a implementação de uma lógica física customizada sobre a estrutura base.
-![Test Scene](docs/figures/scene5.png)
+
+**Nova Interface (2026):** Todos os controles de visualização 3D estão agora acessíveis via checkboxes persistentes no canto superior esquerdo, visíveis em todas as cenas.
+
+![Test Scene — Nova UI 2026](docs/figures/newUIscene5.png)
+
+> **💡 Iluminação Direcional:** A malha 3D é iluminada por uma luz direcional calculada analiticamente no *Geometry Shader*. As normais de cada triângulo são computadas por produto vetorial das arestas deformadas, revelando com nitidez a profundidade e as nuances do relevo do mapa de deslocamento — algo impossível de perceber com cor plana. A intensidade combina componente ambiente (`0.35`) e difusa de Lambert (`0.65`), com vetor de luz inclinado da frente para trás e da esquerda para a direita.
 
 ---
 
@@ -99,6 +104,11 @@ A prova de conceito e validação de que o esqueleto da **Cena 4** realmente fun
 | **Carregamento de Texturas** | Classe proprietária `ofImage` (OpenFrameworks) | `stb_image.h` nativo em C/C++ |
 | **Cálculo de Tempo** | Função interna `ofGetElapsedTimeMillis()` | `std::chrono` da biblioteca padrão C++ |
 | **Gerenciamento de Build** | Solução estática do Visual Studio 2010 | CMake 3.20+ integrado ao vcpkg |
+| **Shaders** | Strings inline no código C++ | Ficheiros externos em `bin/data/shaders/` com hot-reload (`F7`) |
+| **Câmera 3D** | Acoplada à classe `Terrain` | Classe `Camera` dedicada e desacoplada (Arcball + Pan) |
+| **Iluminação** | Sem iluminação (cor plana) | Luz direcional difusa (Lambert) calculada via Geometry Shader |
+| **Esquema de Tessellation** | Fixo (`equal_spacing`) | Seleccionável em runtime: Even / Odd Spacing |
+| **Interface de Controlo** | Sem HUD | 5 checkboxes persistentes em todas as cenas |
 
 ---
 
@@ -109,20 +119,37 @@ A prova de conceito e validação de que o esqueleto da **Cena 4** realmente fun
 * **`Espaço`:** Retorna ao Menu Principal (Cena 0).
 * **`ESC`:** Fecha a aplicação imediatamente.
 
-### Câmera, Visualização e Depuração
-* **`Setas (↑ ↓ ← →)`:** Movimentam a câmera pelo espaço 3D (frente, trás e laterais).
-* **`Page Up` / `Page Down`:** Eleva ou abaixa a altura da câmera (Eixo Y).
-* **`W`:** Alterna a exibição em modo *Wireframe* (linhas de grade).
+### Câmera 3D
+* **`Botão do Meio do Mouse + Arrastar`:** Orbita a câmera livremente ao redor do terreno (Arcball). Nas cenas 1–4, arrastar com o clique esquerdo ou direito também orbita.
+* **`Scroll do Mouse`:** Dá zoom (aproxima/afasta). Na **Cena 5 (Test Scene)**, segure **`Ctrl` + Scroll** para dar zoom.
+* **`W` / `S` / `A` / `D`:** Movem o foco/alvo da câmera no plano do solo (frente, trás, esquerda, direita), de forma **contínua e relativa à orientação atual** — sem atraso de tecla.
+* **`E` / `Q`:** Elevam ou abaixam a altura do alvo da câmera (eixo Y).
+
+### Visualização e Depuração
+* **`F7`:** **Hot-reload** de todos os shaders GLSL a partir dos ficheiros externos, sem reiniciar a aplicação.
+* **`F9`:** Ativa/Desativa o mini-mapa 2D da textura de deslocamento (padrão Decorator).
+* **`F11`:** Alterna o modo *Wireframe* da malha 3D.
 * **`R`:** Liga/Desliga a rotação automática da malha 3D.
 * **`P`:** Pausa/Retoma o cálculo de deformação física no OpenCL.
-* **`S`:** Salva captura em alta definição (.png) da textura de deformação atual na pasta `bin/data/dmap/`.
-* **`D`:** Ativa/Desativa o modo de depuração visual (exibe o mini-mapa 2D no canto da tela com a textura de deslocamento na VRAM compartilhada). Esta visualização geral foi implementada utilizando o padrão de projeto **Decorator**, permitindo inspecionar em tempo real o buffer de textura que influencia a deformação da malha 3D em qualquer uma das cenas.
+* **`M`:** Guarda captura da textura de deformação (`.png`) em `bin/data/dmap/`.
+
+### Checkboxes de Interface (visíveis em todas as cenas)
+
+| Checkbox | Cor | Função |
+| :--- | :--- | :--- |
+| **WIREFRAME** | Laranja | Liga/Desliga o modo wireframe da malha |
+| **ROTATION** | Verde | Liga/Desliga a rotação automática |
+| **CULL FACE** | Azul/Cyan | Ativa/Desativa o culling de faces traseiras (`GL_CULL_FACE`) |
+| **EVEN SPACING** | Amarelo | Tessellation com partição par fracionária suave — **padrão ativo** |
+| **ODD SPACING** | Roxo | Tessellation com partição ímpar fracionária suave |
+
+> **Nota:** EVEN e ODD funcionam como radio buttons — um dos dois estará sempre activo. Clicar no que já está activo não faz nada; para mudar, clique no que está inactivo.
 
 ### Escultura e Pincel Interativo (Cena 5 - Test Scene)
 * **`Scroll do Mouse` ou `+ / -`:** Ajusta o raio de ação do pincel de deformação.
 * **`Clique Esquerdo + Arrastar`:** Aplica deformação positiva (elevação/escultura do relevo).
-* **`Clique Direito + Arrastar`:** Aplica deformação negativa (depressão/escultura de cratera).
-* **`8`, `9` ou `0`:** Modifica a deformação física do canal selecionado (Vermelho, Verde ou Azul).
+* **`Clique Direito + Arrastar`:** Aplica deformação negativa (depressão/cratera).
+* **`8`, `9` ou `0` ou `TAB`:** Seleciona o canal de cor activo (**R → G → B → R**).
 
 ### Controle de Tesselação Dinâmica (GPU)
 * **`F1` / `F2`:** Diminui / Aumenta o fator de Tessellation Interno.
@@ -168,13 +195,21 @@ DisplacementStage/
 │   ├── fonts/             # Fontes (.ttf)
 │   ├── kernels/           # Simulação física em OpenCL (.cl)
 │   ├── textures/          # Texturas e mapas de altura (.png)
-│   └── dmap/              # Capturas de tela históricas
+│   ├── dmap/              # Capturas de textura gravadas em runtime
+│   └── shaders/           # Shaders GLSL externos (hot-reload via F7)
+│       ├── tess/          # displacement.vert/tesc/tese/geom/frag
+│       ├── simple/        # quad.vert/frag (mini-mapa)
+│       └── color/         # flat.vert/frag (UI e cursor)
 ├── docs/                  # Dissertação de Mestrado e artigos científicos
 │   ├── dissertacao_FCA.pdf
 │   └── sbgames_FCA.pdf
-├── src/                   # Código-fonte em C++ (Lógica do Motor & Cenas)
-│   ├── DisplacementStage.cpp
-│   └── ...
+├── src/                   # Código-fonte em C++
+│   ├── Camera.h / Camera.cpp      # Câmera 3D desacoplada (Arcball + Pan)
+│   ├── Scene.h / Scene.cpp        # Classe base com câmera, UI e loop de input
+│   ├── Interface.h / Interface.cpp # HUD com checkboxes e mini-mapa (Decorator)
+│   ├── ShaderManager.h / .cpp     # Compilação, linking e hot-reload de shaders
+│   ├── Terrain.h / Terrain.cpp    # Malha base, tessellation, culling e iluminação
+│   └── ...                        # Cenas: Contact, Force, Morphing, Custom, Test
 ├── vendor/                # Dependências de cabeçalho único (stb_image, etc.)
 ├── CMakeLists.txt         # Configuração de build multiplataforma
 └── README.md              # Documentação principal

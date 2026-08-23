@@ -15,12 +15,8 @@ ContactScene::ContactScene(DisplacementStage * displacementStage)
 	this->dir = true;
 	this->vertical = false;
 
-	this->decorator = new Interface;
-
-	//this->terrain->setWireframe(false);
-	//this->terrain->setRotate(false);
-	this->terrain->setCameraPosition(0,40,60);
-	this->terrain->setCameraTarget(0,0,0);
+	this->camera.setPosition(0,40,60);
+	this->camera.setTarget(0,0,0);
 
 	this->setup();
 }
@@ -110,7 +106,7 @@ void ContactScene::draw(void)
 {
 	//cout << "ContactScene::draw" << endl;
 
-	this->terrain->draw(this->shaderManager, this->texture, this->displacementMap);
+	this->terrain->draw(this->shaderManager, this->texture, this->displacementMap, this->camera.getViewMatrix(), this->camera.getProjectionMatrix(1024.f, 768.f));
 
 	Scene::draw();
 }

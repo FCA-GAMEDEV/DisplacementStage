@@ -63,6 +63,7 @@ void SceneManager::setup(void)
 
 void SceneManager::update(void)
 {
+	this->scene->updateCamera();
 	this->scene->update();
 }
 

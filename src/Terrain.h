@@ -13,21 +13,19 @@ public:
     Terrain(void);
     ~Terrain(void);
 
-    void draw(ShaderManager* shaderManager, Texture* texture, DisplacementMap* displacementMap);
+    void draw(ShaderManager* shaderManager, Texture* texture, DisplacementMap* displacementMap, const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
 
     void setRotate(bool rotate);
     bool getRotate(void);
     void setWireframe(bool wireframe);
     bool getWireframe(void);
-    void setCameraPosition(float x, float y, float z);
-    void setCameraTarget(float x, float y, float z);
+    void setCullFace(bool cullFace);
+    bool getCullFace(void);
     void setTessellationFactor(int inner, int outer);
     void increaseTessellationFactor(int innerPass, int outerPass);
     void decreaseTessellationFactor(int innerPass, int outerPass);
     void setAngle(float angle);
     float getAngle(void);
-    void increaseCameraPosition(float xPass, float yPass, float zPass);
-    void decreaseCameraPosition(float xPass, float yPass, float zPass);
 
 private:
     void initVAO(void);
@@ -35,11 +33,9 @@ private:
     int   tessLevelInner;
     int   tessLevelOuter;
 
-    float x, y, z;      // posição da câmera
-    float tx, ty, tz;   // alvo da câmera
-
     bool  bWireframe;
     bool  bRotate;
+    bool  bCullFace;
     float angle;
 
     // VAO/VBO para o plano de 2 triângulos
