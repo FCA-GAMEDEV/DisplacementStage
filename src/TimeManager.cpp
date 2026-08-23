@@ -27,7 +27,8 @@ void TimeManager::update(void)
 
 void TimeManager::print(void)
 {
-    std::cout << "deltaTime: " << fDeltaTime << " s\n";
+    // (suprimido para nao poluir a consola em runtime)
+
 }
 
 float TimeManager::getfDeltaTime(void)    { return fDeltaTime; }

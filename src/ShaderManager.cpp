@@ -54,7 +54,8 @@ std::string ShaderManager::loadFile(const std::string& path)
 
 void ShaderManager::reloadShaders(void)
 {
-    std::cout << "[ShaderManager] Recarregando shaders de arquivos externos...\n";
+
+
 
     // Liberar programas anteriores
     if (ShaderProgramEqual) { glDeleteProgram(ShaderProgramEqual); ShaderProgramEqual = 0; }
@@ -75,7 +76,7 @@ void ShaderManager::reloadShaders(void)
     this->createSimpleShader();
     this->compileColorShader();
     
-    std::cout << "[ShaderManager] Shaders recarregados com sucesso.\n";
+    std::cout << "[F7] Shaders recarregados.\n";
 }
 
 // ═══════════════════════════════════════════════════════════════

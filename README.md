@@ -81,7 +81,12 @@ Um modelo de partida limpo e desacoplado (princípio *Open-Closed*). Ele serve c
 
 #### 5. Test Scene (Cena 5 - Prova Prática de Extensibilidade)
 A prova de conceito e validação de que o esqueleto da **Cena 4** realmente funciona. Trata-se de uma ferramenta autoral completa de edição e escultura em tempo real orientada por um pincel circular interativo (deformações positivas e negativas nos canais RGB), demonstrando a implementação de uma lógica física customizada sobre a estrutura base.
-![Test Scene](docs/figures/scene5.png)
+
+**Nova Interface (2026):** Todos os controles de visualização 3D estão agora acessíveis via checkboxes persistentes no canto superior esquerdo, visíveis em todas as cenas.
+
+![Test Scene — Nova UI 2026](docs/figures/newUIscene5.png)
+
+> **💡 Iluminação Direcional:** A malha 3D é iluminada por uma luz direcional calculada analiticamente no *Geometry Shader*. As normais de cada triângulo são computadas por produto vetorial das arestas deformadas, revelando com nitidez a profundidade e as nuances do relevo do mapa de deslocamento — algo impossível de perceber com cor plana. A intensidade combina componente ambiente (`0.35`) e difusa de Lambert (`0.65`), com vetor de luz inclinado da frente para trás e da esquerda para a direita.
 
 ---
 
@@ -126,7 +131,7 @@ A prova de conceito e validação de que o esqueleto da **Cena 4** realmente fun
 * **`F11`:** Alterna o modo *Wireframe* da malha 3D.
 * **`R`:** Liga/Desliga a rotação automática da malha 3D.
 * **`P`:** Pausa/Retoma o cálculo de deformação física no OpenCL.
-* **`S`:** Guarda captura da textura de deformação (`.png`) em `bin/data/dmap/`.
+* **`M`:** Guarda captura da textura de deformação (`.png`) em `bin/data/dmap/`.
 
 ### Checkboxes de Interface (visíveis em todas as cenas)
 

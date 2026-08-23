@@ -636,7 +636,8 @@ void Interface::mouseDragged (int x, int y, int btn)   { if (button == 1) return
 
 void Interface::mousePressed (int x, int y, int btn)   
 { 
-    std::cout << "[MouseClick] x = " << x << ", y = " << y << "\n";
+
+
     if (btn == 0) // Clique esquerdo do mouse
     {
         // Detectar se o clique ocorreu dentro da checkbox de Wireframe (x: [15, 160], y: [334, 358])

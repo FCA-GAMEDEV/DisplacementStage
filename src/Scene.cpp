@@ -118,9 +118,10 @@ void Scene::updateCamera(void)
 
 		if (this->decorator->checkAndResetOddSpacingToggle())
 		{
-			// Se ODD já está ativo, volta para EVEN (nunca para Equal/0)
+			// Se ODD já está ativo, não faz nada — clicar no inativo é que muda
 			int current = ShaderManager::getInstance().getTessellationScheme();
-			ShaderManager::getInstance().setTessellationScheme(current == 2 ? 1 : 2);
+			if (current != 2)
+				ShaderManager::getInstance().setTessellationScheme(2);
 		}
 	}
 
@@ -160,7 +161,7 @@ void Scene::keyReleased(int key)
 	if (key == GLFW_KEY_F9)
 		this->bShowDecorator = !this->bShowDecorator;
 
-	if (key == 'S' || key == 's')
+	if (key == 'M' || key == 'm')
 	{
 		unsigned char * _p = new unsigned char[64*64*4];
 		glActiveTexture(GL_TEXTURE1);
@@ -177,7 +178,8 @@ void Scene::keyReleased(int key)
 		stbi_write_png(path.c_str(), 64, 64, 4, _p, 64 * 4);
 
 		delete [] _p;
-		cout << "Imagem \"" << path.c_str() << "\" criada com sucesso!" << endl;
+
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
