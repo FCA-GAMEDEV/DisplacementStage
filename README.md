@@ -14,19 +14,21 @@
 
 ## ⬇️ Executável Pronto para Uso (Windows x64)
 
-> Baixe e execute diretamente — não é necessário compilar nem instalar o Visual Studio, CMake ou vcpkg.
+> Baixe e execute diretamente — não é necessário compilar nem instalar Visual Studio, CMake ou vcpkg.
 
-🚀 **[⬇️ Baixar DisplacementStage v1.0.0 (.zip)](https://github.com/FCA-GAMEDEV/DisplacementStage/releases/download/v1.0.0/DisplacementStage-v1.0.0-x64.zip)**
+[![Baixar DisplacementStage v1.0.0](https://img.shields.io/badge/Download-DisplacementStage_v1.0.0_(.zip)-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/FCA-GAMEDEV/DisplacementStage/releases/download/v1.0.0/DisplacementStage-v1.0.0-x64.zip)
 
 ### Passo a passo
-1. Baixe e extraia o `.zip` mantendo a estrutura de pastas
-2. *(Se necessário)* Instale o **[Visual C++ Redistributable 2022 x64](https://aka.ms/vs/17/release/vc_redist.x64.exe)** — já presente na maioria dos PCs com jogos modernos
-3. Execute `DisplacementStage.exe`
+1. Baixe e extraia o `.zip` mantendo a estrutura de pastas intacta.
+2. *(Se necessário)* Instale o **[Visual C++ Redistributable 2022 x64](https://aka.ms/vs/17/release/vc_redist.x64.exe)** — já presente na maioria dos PCs com jogos modernos.
+3. Execute `DisplacementStage.exe`.
+
+> 💡 **Nota sobre o Windows SmartScreen:** Por ser um binário compilado de forma independente (sem certificado comercial pago), caso o Windows exiba o alerta azul ao abrir, clique em **"Mais informações"** e depois em **"Executar assim mesmo"**.
 
 ### Requisitos de Hardware
-| | |
-|:--|:--|
-| **GPU** | OpenGL 4.2 Core + OpenCL (NVIDIA / AMD / Intel — driver padrão já inclui ambos) |
+| Componente | Requisito Mínimo |
+| :--- | :--- |
+| **GPU** | Suporte a **OpenGL 4.2 Core** + **OpenCL 2.0+** *(Em notebooks com gráficos híbridos, certifique-se de executar com a GPU dedicada NVIDIA/AMD)* |
 | **OS** | Windows 10 / 11 (64-bit) |
 
 ---
