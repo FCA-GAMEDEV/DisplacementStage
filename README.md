@@ -8,6 +8,26 @@
 [![CMake](https://img.shields.io/badge/CMake-3.20%2B-red.svg)](https://cmake.org/)
 [![Platform](https://img.shields.io/badge/Platform-Windows_x64-lightgrey.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/FCA-GAMEDEV/DisplacementStage?color=brightgreen&label=Release)](https://github.com/FCA-GAMEDEV/DisplacementStage/releases/latest)
+
+---
+
+## ⬇️ Executável Pronto para Uso (Windows x64)
+
+> Baixe e execute diretamente — não é necessário compilar nem instalar o Visual Studio, CMake ou vcpkg.
+
+🚀 **[⬇️ Baixar DisplacementStage v1.0.0 (.zip)](https://github.com/FCA-GAMEDEV/DisplacementStage/releases/download/v1.0.0/DisplacementStage-v1.0.0-x64.zip)**
+
+### Passo a passo
+1. Baixe e extraia o `.zip` mantendo a estrutura de pastas
+2. *(Se necessário)* Instale o **[Visual C++ Redistributable 2022 x64](https://aka.ms/vs/17/release/vc_redist.x64.exe)** — já presente na maioria dos PCs com jogos modernos
+3. Execute `DisplacementStage.exe`
+
+### Requisitos de Hardware
+| | |
+|:--|:--|
+| **GPU** | OpenGL 4.2 Core + OpenCL (NVIDIA / AMD / Intel — driver padrão já inclui ambos) |
+| **OS** | Windows 10 / 11 (64-bit) |
 
 ---
 

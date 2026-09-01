@@ -1,0 +1,88 @@
+==================================================
+  DisplacementStage v1.0.0 (Windows x64)
+  Dissertacao de Mestrado — UFF / FCA-GAMEDEV
+==================================================
+
+REQUISITOS DE HARDWARE
+──────────────────────
+  • GPU com suporte a OpenGL 4.2+ e OpenCL
+    (qualquer driver NVIDIA, AMD ou Intel atualizado já inclui ambos)
+  • Windows 10 ou Windows 11 (64-bit)
+  • 4 GB de RAM recomendado
+
+REQUISITO DE SOFTWARE (VC++ Redistributable)
+─────────────────────────────────────────────
+  O executável requer o Visual C++ Redistributable 2022 x64.
+  A maioria dos PCs com jogos modernos já possui instalado.
+
+  Se ao executar aparecer erro de DLL ausente (ex: MSVCP140.dll),
+  baixe e instale o arquivo abaixo (gratuito, ~25 MB):
+
+  https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+COMO EXECUTAR
+─────────────
+  1. Extraia todo o conteudo desta pasta .zip em um local de sua escolha
+  2. Certifique-se de que a estrutura de pastas foi mantida:
+       DisplacementStage.exe
+       glfw3.dll
+       glew32.dll
+       data\
+         fonts\
+         kernels\
+         shaders\
+         textures\
+  3. Execute DisplacementStage.exe
+
+  IMPORTANTE: Nao mova o .exe para fora da pasta.
+              Ele precisa encontrar a pasta data\ no mesmo diretorio.
+
+CONTROLES RAPIDOS
+─────────────────
+  [ 1 ] a [ 5 ]          Alterna entre as 5 cenas de validacao
+  [ Espaco ]             Volta ao Menu Principal
+  [ ESC ]                Fecha a aplicacao
+
+  CAMERA 3D
+  • Botao do Meio + Arrastar  Orbita a camera (Arcball)
+  • Scroll do Mouse           Zoom (aproxima/afasta)
+  • W / S / A / D             Move o foco da camera no plano
+  • E / Q                     Eleva ou abaixa o foco
+
+  VISUALIZACAO
+  • F7    Hot-reload dos shaders GLSL (sem reiniciar)
+  • F9    Liga/desliga mini-mapa 2D
+  • F11   Alterna modo Wireframe
+  • R     Liga/desliga rotacao automatica
+  • P     Pausa/retoma a fisica no OpenCL
+  • M     Grava captura da textura em data\dmap\
+
+  TESSELLATION DINAMICA (GPU)
+  • F1 / F2   Diminui / Aumenta fator interno
+  • F3 / F4   Diminui / Aumenta fator externo
+  • F5 / F6   Ajusta ambos simultaneamente
+
+  CENA 5 — PINCEL DE ESCULTURA
+  • Scroll ou + / -           Ajusta raio do pincel
+  • Clique Esquerdo + Arrastar Elevacao do relevo
+  • Clique Direito + Arrastar  Depressao/cratera
+  • 8, 9, 0 ou TAB            Seleciona canal de cor (R / G / B)
+  • Ctrl + Scroll             Zoom (em vez do pincel)
+
+REPOSITORIO E DOCUMENTACAO
+──────────────────────────
+  GitHub:       https://github.com/FCA-GAMEDEV/DisplacementStage
+  Dissertacao:  docs/dissertacao_FCA.pdf (no repositorio)
+  Artigo:       docs/sbgames_FCA.pdf (no repositorio)
+
+CITACAO ACADEMICA
+─────────────────
+  @mastersthesis{andrade2012displacement,
+    title  = {Arquitetura extensivel para mapas dinamicos de
+              deslocamento na GPU em jogos digitais},
+    author = {Andrade, Fabio C.},
+    year   = {2012},
+    school = {Universidade Federal Fluminense (UFF)}
+  }
+
+==================================================

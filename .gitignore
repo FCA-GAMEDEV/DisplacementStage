@@ -34,3 +34,8 @@ bin/05_TestTestes/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# Release packages
+*.zip
+DisplacementStage-*/
+
